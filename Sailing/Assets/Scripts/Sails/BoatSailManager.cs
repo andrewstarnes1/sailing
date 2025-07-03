@@ -17,7 +17,7 @@ public class BoatSailManager : MonoBehaviour
     {
         Vector3 totalForce = Vector3.zero;
         Vector3 weightedPosition = Vector3.zero;
-
+        /*
         foreach (var sail in sails)
         {
             Vector3 force = sail.AerodynamicForce;
@@ -55,6 +55,6 @@ public class BoatSailManager : MonoBehaviour
 
             Vector3 heelTorque = rollAxis * heelTorqueMagnitude * heelDirection;
             boatBody.AddTorque(heelTorque, ForceMode.Force);
-        }
+        }*/
     }
 }
