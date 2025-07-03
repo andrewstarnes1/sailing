@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 5274f9dbf11d0a7499738e58eb5f99ee
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Scripts/Standard/CommandPass/KWS_WaterPassHandler_URP.cs
+  uploadId: 767082

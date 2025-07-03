@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 6c3662a81f6d33643a7b1b9c12ab99d3
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 625f186215c104763be7675aa2d941aa, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Shaders/Resources/Common/API/KWS_ShadergraphTransparent/TransparentLit_Dithered.shadergraph
+  uploadId: 767082

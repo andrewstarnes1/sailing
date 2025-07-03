@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cc1649beb23c071468acd500e04a0780
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/DemoScenes/GalleonDemo/Sky_Galleon.mat
+  uploadId: 767082

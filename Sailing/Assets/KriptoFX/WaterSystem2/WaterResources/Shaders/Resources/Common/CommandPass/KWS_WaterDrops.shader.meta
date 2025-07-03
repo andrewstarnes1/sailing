@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 7da806f6a909c584d898c12b6a83ba56
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Shaders/Resources/Common/CommandPass/KWS_WaterDrops.shader
+  uploadId: 767082

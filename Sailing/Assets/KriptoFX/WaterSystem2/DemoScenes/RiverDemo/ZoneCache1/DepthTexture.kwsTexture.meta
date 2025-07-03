@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 5af651d29d9eac248a375a19e14332a3
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 4490d0246ff5a4846bea23d5da9372ab, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/DemoScenes/RiverDemo/ZoneCache1/DepthTexture.kwsTexture
+  uploadId: 767082

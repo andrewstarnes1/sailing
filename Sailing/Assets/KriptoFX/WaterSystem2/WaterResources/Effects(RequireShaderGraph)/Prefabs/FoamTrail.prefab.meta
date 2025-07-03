@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 45f6338f839c94849ba9dfc1fbc1ed0a
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Effects(RequireShaderGraph)/Prefabs/FoamTrail.prefab
+  uploadId: 767082

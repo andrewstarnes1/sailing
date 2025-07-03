@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 71426c0020c070b488a04d7cf37461b4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Scripts/Standard/CommandPass/CopyColorPass.cs
+  uploadId: 767082

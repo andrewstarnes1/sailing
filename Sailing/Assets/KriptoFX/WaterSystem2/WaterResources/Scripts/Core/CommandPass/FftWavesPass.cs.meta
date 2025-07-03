@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: ad63b864d4481554e8a1446840c46303
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Scripts/Core/CommandPass/FftWavesPass.cs
+  uploadId: 767082

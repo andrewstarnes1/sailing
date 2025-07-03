@@ -1,0 +1,141 @@
+diff --git a//dev/null b/Assets/Scripts/GenoaSail.cs
+index 0000000000000000000000000000000000000000..c5d41ef2866f7ae095feb9c08e880c3be11acab4 100644
+--- a//dev/null
++++ b/Assets/Scripts/GenoaSail.cs
+@@ -0,0 +1,136 @@
++using UnityEngine;
++
++/// <summary>
++/// Procedural genoa sail that responds to wind and sheet tension.
++/// Attach this script to an empty GameObject with MeshFilter and MeshRenderer.
++/// </summary>
++[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
++public class GenoaSail : MonoBehaviour
++{
++    [Header("Genoa Corners")]
++    public Transform Head;        // top of the sail
++    public Transform Tack;        // bottom front corner
++
++    [Tooltip("Reference point for the clew when no sheets are attached")]
++    public Transform Clew;        // base location of the clew
++
++    [Header("Sheets")]
++    public Transform PortSheet;   // sheet anchor on port side
++    public Transform StarboardSheet; // sheet anchor on starboard side
++
++    [Range(0f, 1f)]
++    public float PortSheetTension = 0.5f;
++    [Range(0f, 1f)]
++    public float StarboardSheetTension = 0.5f;
++
++    [Header("Sail Shape")]
++    [Tooltip("Number of segments between head and tack")] 
++    public int Resolution = 10;
++    [Tooltip("Cross-section curvature factor")]
++    public float Curvature = 0.1f;
++    public float SailArea = 20f; // approximate area for aerodynamic force
++
++    [Header("Wind Source")]
++    public Wind Wind; // optional wind source reference
++
++    private Mesh mesh;
++
++    public Vector3 AerodynamicForce { get; private set; }
++
++    void Awake()
++    {
++        mesh = new Mesh();
++        GetComponent<MeshFilter>().mesh = mesh;
++        BuildMesh(Vector3.zero); // initialize
++    }
++
++    void Update()
++    {
++        Vector3 clewPosition = CalculateClewPosition();
++        BuildMesh(clewPosition);
++        ComputeAerodynamicForce(clewPosition);
++    }
++
++    Vector3 CalculateClewPosition()
++    {
++        // Interpolate between port and starboard sheet anchor based on tension.
++        if (PortSheet != null && StarboardSheet != null)
++        {
++            float total = PortSheetTension + StarboardSheetTension + 0.0001f;
++            float t = StarboardSheetTension / total;
++            return Vector3.Lerp(PortSheet.position, StarboardSheet.position, t);
++        }
++        if (PortSheet != null) return PortSheet.position;
++        if (StarboardSheet != null) return StarboardSheet.position;
++        if (Clew != null) return Clew.position;
++        return transform.position;
++    }
++
++    void BuildMesh(Vector3 clewPos)
++    {
++        if (Head == null || Tack == null) return;
++
++        int vertCount = (Resolution + 1) * 2;
++        if (mesh.vertexCount != vertCount)
++        {
++            mesh.Clear();
++            mesh.vertices = new Vector3[vertCount];
++            mesh.uv = new Vector2[vertCount];
++            mesh.triangles = new int[Resolution * 6];
++        }
++
++        var vertices = mesh.vertices;
++        var uv = mesh.uv;
++        var tris = mesh.triangles;
++
++        Vector3 luffDir = Tack.position - Head.position;
++        Vector3 sideDir = clewPos - Tack.position;
++        Vector3 normalDir = Vector3.Cross(luffDir, sideDir).normalized;
++
++        for (int i = 0; i <= Resolution; i++)
++        {
++            float t = i / (float)Resolution;
++            Vector3 luffPoint = Vector3.Lerp(Head.position, Tack.position, t);
++
++            // Position toward clew with a bit of curvature to simulate draft
++            Vector3 toClew = clewPos - luffPoint;
++            Vector3 curveOffset = normalDir * (Curvature * (1f - Mathf.Abs(0.5f - t) * 2f));
++            Vector3 leechPoint = luffPoint + toClew + curveOffset;
++
++            vertices[i * 2] = transform.InverseTransformPoint(luffPoint);
++            vertices[i * 2 + 1] = transform.InverseTransformPoint(leechPoint);
++
++            uv[i * 2] = new Vector2(0f, t);
++            uv[i * 2 + 1] = new Vector2(1f, t);
++
++            if (i < Resolution)
++            {
++                int idx = i * 2;
++                tris[i * 6 + 0] = idx;
++                tris[i * 6 + 1] = idx + 1;
++                tris[i * 6 + 2] = idx + 2;
++                tris[i * 6 + 3] = idx + 1;
++                tris[i * 6 + 4] = idx + 3;
++                tris[i * 6 + 5] = idx + 2;
++            }
++        }
++
++        mesh.vertices = vertices;
++        mesh.uv = uv;
++        mesh.triangles = tris;
++        mesh.RecalculateNormals();
++    }
++
++    void ComputeAerodynamicForce(Vector3 clewPos)
++    {
++        if (Wind == null) return;
++        Vector3 luffDir = (Tack.position - Head.position).normalized;
++        Vector3 leechDir = (clewPos - Head.position).normalized;
++        Vector3 normal = Vector3.Cross(luffDir, leechDir).normalized;
++
++        Vector3 windVel = Wind.Velocity;
++        float relative = Vector3.Dot(windVel.normalized, normal);
++        float dynamicPressure = 0.5f * 1.225f * windVel.sqrMagnitude; // air density 1.225
++        AerodynamicForce = normal * (dynamicPressure * SailArea * relative);
++    }
++}

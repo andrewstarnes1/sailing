@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 61c2959147680b745ae05723614465ef
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/DemoScenes/Objects/rock1/Materials/rock_granite_wet.mat
+  uploadId: 767082

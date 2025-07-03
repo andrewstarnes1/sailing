@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8a0b18873c73e8248a1add1cb5dd167d
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/DemoScenes/Terrains/KWS2_SandLayer.terrainlayer
+  uploadId: 767082

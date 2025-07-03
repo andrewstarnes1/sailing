@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 170a07b10441a55418a8dda4c8789c9c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 4890085278179872738
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/DemoScenes/Terrains/SandDemo.lighting
+  uploadId: 767082

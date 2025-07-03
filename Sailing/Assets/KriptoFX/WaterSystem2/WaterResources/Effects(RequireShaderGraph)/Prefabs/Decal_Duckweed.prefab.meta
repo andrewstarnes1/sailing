@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 77145f0e9098113418db87fdfc07a5eb
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Effects(RequireShaderGraph)/Prefabs/Decal_Duckweed.prefab
+  uploadId: 767082

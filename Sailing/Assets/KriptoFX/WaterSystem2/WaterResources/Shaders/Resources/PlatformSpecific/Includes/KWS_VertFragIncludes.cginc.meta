@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 4a2a632dd7b4e384194ec888f76d084c
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Shaders/Resources/PlatformSpecific/Includes/KWS_VertFragIncludes.cginc
+  uploadId: 767082

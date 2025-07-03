@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 839bbd4e043bd1f48bd5f7a769472d82
+ComputeShaderImporter:
+  externalObjects: {}
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Shaders/Resources/Common/CommandPass/KWS_WavesFFT.compute
+  uploadId: 767082

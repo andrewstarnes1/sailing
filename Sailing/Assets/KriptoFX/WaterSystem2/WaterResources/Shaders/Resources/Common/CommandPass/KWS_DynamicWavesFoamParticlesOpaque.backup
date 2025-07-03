@@ -1,0 +1,389 @@
+//Shader "Hidden/KriptoFX/KWS/KWS_DynamicWavesFoamParticles"
+//{
+//	HLSLINCLUDE
+
+//	#define KWS_USE_SOFT_SHADOWS
+//	#include "../../PlatformSpecific/Includes/KWS_HelpersIncludes.cginc"
+//	#include "../../PlatformSpecific/KWS_Lighting.cginc"
+
+//	Texture2D KWS_DynamicWavesFoamShadowMap;
+//	float4 KWS_DynamicWavesFoamShadowMap_TexelSize;
+
+//	static const float2 quadOffsets[3] =
+//	{
+//		float2(1, -1),
+//		float2(-1, -1),
+//		float2(0, 1)
+//	};
+
+//	#define FOAM_SIZE_MIN 0.08
+//	#define FOAM_SIZE_MAX 0.05
+
+//	//#define SPLASH_SIZE_MIN 1.25
+//	//#define SPLASH_SIZE_MAX 3.5
+
+//	#define SPLASH_SIZE_MIN 1.0
+//	#define SPLASH_SIZE_MAX 5.0
+
+//	#define FOAM_MIN_LOD_COUNT 0.02
+//	#define SPLASH_MIN_LOD_COUNT 0.25
+
+//	float2 RotateBillboardVertexOptimized(float2 offset, float angle, float2 center)
+//	{
+//		float2 localOffset = offset -center;
+
+//		float sinA, cosA;
+//		sincos(angle, sinA, cosA);
+
+//		float2 rotatedOffset;
+//		rotatedOffset.x = localOffset.x * cosA - localOffset.y * sinA;
+//		rotatedOffset.y = localOffset.x * sinA + localOffset.y * cosA;
+
+//		return rotatedOffset +center;
+//	}
+
+//	void GetDynamicWavesFoamParticlesVertexPosition(FoamParticle particle, uint vertexID, bool isShadowPass, float farDistance, out float3 vertex, out float2 uv, out float particleSpeed, out float normalizedLifeTime)
+//	{
+		
+//		float3 center = particle.position;
+//		float3 velocity = particle.velocity;
+//		particleSpeed = length(velocity);
+		
+//		isShadowPass = false;
+//		normalizedLifeTime = 1;
+//		//isShadowPass = particle.particleType = KWS_DYNAMIC_WAVE_PARTICLE_TYPE_FOAM;
+
+//		float verticalVelocityStretch = 0;
+//		if (particle.particleType > 0)
+//		{
+//			float gravityFactor = saturate(dot(float3(0, -1, 0), velocity / particleSpeed));
+//			//verticalVelocityStretch = saturate(KWS_Pow5(gravityFactor) * particleSpeed * 0.1);
+//			verticalVelocityStretch = particle.distanceToSurface * 0.15;
+//			//verticalVelocityStretch = 0;
+
+//		}
+
+//		float particleSize = particle.size;
+//		float particleHeightOffset = 0;
+		
+//		if (particle.particleType == KWS_DYNAMIC_WAVE_PARTICLE_TYPE_FOAM)
+//		{
+//			particleSize *= saturate(particle.currentLifetime * 3);
+//			particleSize *= 1 + farDistance * 5;
+//			particleHeightOffset += particleSize * 0.75;
+//		}
+//		else if (particle.particleType > 0)
+//		{
+
+//			normalizedLifeTime = 1 - saturate(particle.currentLifetime / lerp(1.5, 2, particle.initialRandom01));
+//			float fadeFactor = 0.4 + 0.6 * (sin(normalizedLifeTime * 3.1415));
+//			//float fadeFactor = 0.5 + saturate(1 - KWS_Pow2(1-normalizedLifeTime)) * 0.5;
+
+//			particleSize *= fadeFactor;
+//			verticalVelocityStretch *= fadeFactor * (1 - normalizedLifeTime);
+//			particleHeightOffset += particleSize * 0.5;
+//		}
+
+		
+		
+//		float2 offset = quadOffsets[vertexID];
+//		uv = offset * 0.5 + 0.5;
+//		offset = RotateBillboardVertexOptimized(offset, (particle.initialRandom01 + particle.size) * 3.1415 * 2, float2(0, -0.5));
+
+//		float3 cameraForward = GetCameraForwardVector();
+//		float3 right = normalize(cross(float3(0, 1, 0), cameraForward));
+//		float3 up = cross(cameraForward, right);
+
+//		vertex = center + (right * offset.x) * particleSize + (up * offset.y) * (particleSize + verticalVelocityStretch);
+//		vertex.y += particleHeightOffset;
+//	}
+
+	
+//	float3 GetSplashData(float2 uv, float uvOffset)
+//	{
+//		uv.x *= 0.25;
+//		uv.x += uvOffset;
+//		float3 data = KWS_SplashTex0.SampleBias(sampler_linear_repeat, uv, -0.5).xyz;
+
+//		return data;
+//	}
+
+//	float GetParticleAlpha(float lifetime)
+//	{
+//		float fadeIn = saturate(lifetime * 20);
+//		float fadeOut = saturate((1.0 - lifetime) * 1.25);
+//		return fadeIn * fadeOut;
+//	}
+
+//	struct appdata
+//	{
+//		uint instanceID : SV_InstanceID;
+//		uint vertexID : SV_VertexID;
+//	};
+//	ENDHLSL
+
+
+//	SubShader
+//	{
+		
+//		Tags { "RenderType" = "Opaque" "Queue" = "AlphaTest+1" }
+//		Zwrite On
+//		//Tags { "RenderType" = "Transparent" "Queue" = "Transparent+1" }
+
+//		Pass
+//		{
+			
+//			//Blend SrcAlpha OneMinusSrcAlpha
+//			//Zwrite On
+//			Cull Off
+//			HLSLPROGRAM
+
+//			#pragma vertex vert
+//			#pragma fragment frag
+			
+//			#pragma multi_compile _ KWS_USE_DIR_LIGHT
+
+
+//			struct v2f
+//			{
+//				float2 uv : TEXCOORD0;
+//				float4 pos : SV_POSITION;
+//				float4 screenPos : TEXCOORD1;
+//				float3 worldPos : TEXCOORD2;
+//				nointerpolation uint particleType : TEXCOORD3;
+//				nointerpolation float particleRandom01 : TEXCOORD4;
+//				nointerpolation float distanceToCameraFade : TEXCOORD5;
+//				nointerpolation float uvOffset : TEXCOORD6;
+//				nointerpolation float normalizedLifeTime : TEXCOORD7;
+//				float3 color : COLOR0;
+//			};
+
+
+//			v2f vert(appdata v)
+//			{
+//				v2f o = (v2f)0;
+//				float3 vertex;
+//				float2 uv;
+//				float particleSpeed;
+//				float normalizedLifeTime;
+//				FoamParticle particle = KWS_ParticlesBuffer[v.instanceID];
+				
+//				float cameraDistance = GetWorldToCameraDistance(particle.position);
+//				float farDistance = saturate(cameraDistance * 0.005);
+				
+//				GetDynamicWavesFoamParticlesVertexPosition(particle, v.vertexID, false, farDistance, vertex, uv, particleSpeed, normalizedLifeTime);
+				
+//				vertex.y += farDistance * 0.5;
+
+//				o.particleType = particle.particleType;
+//				o.particleRandom01 = particle.initialRandom01;
+//				o.distanceToCameraFade = farDistance;
+//				o.uvOffset = particle.uvOffset;
+//				o.normalizedLifeTime = normalizedLifeTime;
+
+//				o.pos = UnityObjectToClipPos(float4(vertex, 1.0));
+//				o.uv = uv;
+//				o.screenPos = ComputeScreenPos(o.pos);
+//				o.worldPos = LocalToWorldPos(vertex);
+
+//				float2 screenUV = o.screenPos.xy / o.screenPos.w;
+//				bool isUnderwater = GetUnderwaterMask(GetWaterMaskFast(screenUV));
+//				//if (isUnderwater) o.pos.w = NAN_VALUE;
+
+//				//float atten = 1;
+//				//#if defined(KWS_USE_DIR_LIGHT)
+//				//	atten = DirLightRealtimeShadow(0, o.worldPos.xyz);
+//				//	atten *= atten;
+//				//	//return float4(atten, 0,0,1);
+//				//#endif
+//				//half exposure = GetExposure();
+//				//float3 ambient = GetAmbientColor(exposure);
+//				//float3 dirLight = GetVolumeLightSunAngleAttenuation(GetMainLightDir(), float3(0, 1, 0)) * GetMainLightColor(exposure);
+//				//o.color = (ambient + saturate(dirLight * atten));
+
+				
+//				return o;
+//			}
+
+
+//			float4 frag(v2f i) : SV_Target
+//			{
+//				float2 screenUV = i.screenPos.xy / i.screenPos.w;
+				
+
+//				bool isSplash = i.particleType > 0;
+//				float3 waterColor = float3(0.7, 0.85, 1);
+
+//				float atten = 1;
+//				#if defined(KWS_USE_DIR_LIGHT)
+//					atten = DirLightRealtimeShadow(0, i.worldPos.xyz);
+//					//atten = saturate(atten + 0.25);
+//					atten *= atten;
+//					//return float4(atten, 0,0,1);
+//				#endif
+//				half exposure = GetExposure();
+//				float3 ambient = GetAmbientColor(exposure);
+//				float3 dirLight = GetVolumeLightSunAngleAttenuation(GetMainLightDir(), float3(0, 1, 0)) * GetMainLightColor(exposure);
+//				i.color = (ambient + saturate(dirLight * atten));
+
+//				float noiseIGN = InterleavedGradientNoise(i.pos.xy, KW_Time * 10 + i.particleRandom01 * 100);
+				
+//				float bubbleAlpha = lerp(0.05, 0.11, KWS_Pow3(i.particleRandom01));
+//				if (isSplash)
+//				{
+//					float3 splashData = GetSplashData(i.uv, i.uvOffset);
+//					float splashMain = splashData.x;
+//					float splashShine = splashData.y;
+//					float noise = splashData.z;
+
+//					float lifeTime = 1 - GetParticleAlpha(i.normalizedLifeTime);
+					
+//					noise = saturate(noise - lifeTime * 2 + 1);
+//					splashShine = splashShine * noise;
+//					splashMain = splashMain * noise;
+//					float splashShineExposed = splashShine * splashShine * splashShine;
+
+//					//float normalizedSpeed = saturate(i.initialSpeed * i.initialSpeed * 0.05);
+//					//waterColor *= lerp(0.75, 1.0, normalizedSpeed);
+
+
+//					float splashAlpha = saturate(splashMain * splashMain * 2 + splashShineExposed * 1);
+//					float3 splashColor = (waterColor + splashShineExposed * 10) * i.color;
+//					if (splashAlpha < 0.01) discard;
+					
+//					//if (noiseIGN * (splashShine + 0.07) < 0.06) discard;
+//					if (noiseIGN * (dot(waterColor + splashShine * 0.1, 0.33) - 0.41) < 0.2) discard;
+
+//					//return float4(i.uv, 0, 1);
+//					return float4(splashColor, splashAlpha);
+//				}
+				
+				
+//				float alpha = saturate(1 - length(i.uv - float2(0.5, 0.33)) * 2.5);
+				
+//				float3 bubblesColor = float3(0.75, 0.85, 1);
+//				bubblesColor = lerp(bubblesColor, bubblesColor * bubbleAlpha * bubbleAlpha * 5 + bubblesColor * 0.75 * (1 - KWS_Pow5(i.particleRandom01)), isSplash);
+				
+//				bubblesColor *= i.color;
+				
+				
+//				float2 dynamicWavesUV = GetDynamicWavesUV(i.worldPos);
+//				float borderFade = GetDynamicWavesBorderFading(dynamicWavesUV);
+				
+//				if (noiseIGN * (dot(alpha, 0.33)) < 0.15) discard;
+//				//return float4(bubblesColor, 1);
+//				return float4(saturate(bubblesColor), saturate(bubbleAlpha * bubbleAlpha * alpha * borderFade * 15));
+//			}
+//			ENDHLSL
+//		}
+
+
+		
+//		Pass
+//		{
+//			Tags { "LightMode" = "ShadowCaster" }
+
+//			Cull Off
+//			ZWrite On
+//			ZTest LEqual
+
+//			HLSLPROGRAM
+//			#pragma vertex vert
+//			#pragma fragment frag
+//			#pragma multi_compile_shadowcaster
+
+
+//			struct v2f
+//			{
+//				float4 pos : SV_POSITION;
+//				UNITY_VERTEX_INPUT_INSTANCE_ID
+//				UNITY_VERTEX_OUTPUT_STEREO
+//				float2 uv : TEXCOORD0;
+//				uint particleType : TEXCOORD1;
+//				nointerpolation float uvOffset : TEXCOORD2;
+//				nointerpolation float normalizedLifeTime : TEXCOORD3;
+//				nointerpolation float particleRandom01 : TEXCOORD4;
+//			};
+
+//			v2f vert(appdata v)
+//			{
+//				v2f o;
+
+//				UNITY_INITIALIZE_OUTPUT(v2f, o);
+
+//				UNITY_SETUP_INSTANCE_ID(v);
+//				UNITY_TRANSFER_INSTANCE_ID(v, o);
+//				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+				
+//				float3 vertex;
+//				float2 uv;
+//				float particleSpeed;
+//				float normalizedLifeTime;
+//				FoamParticle particle = KWS_ParticlesBuffer[v.instanceID];
+//				float cameraDistance = GetWorldToCameraDistance(particle.position);
+//				float farDistance = saturate(cameraDistance * 0.005);
+
+//				GetDynamicWavesFoamParticlesVertexPosition(particle, v.vertexID, false, farDistance, vertex, uv, particleSpeed, normalizedLifeTime);
+
+//				o.pos = UnityObjectToClipPos(float4(vertex, 1.0));
+//				o.uv = uv;
+//				o.uvOffset = particle.uvOffset;
+//				o.normalizedLifeTime = normalizedLifeTime;
+//				o.particleRandom01 = particle.initialRandom01;
+
+//				//o.screenPos = ComputeScreenPos(o.pos);
+//				o.particleType = particle.particleType;
+//				return o;
+//			}
+
+//			float4 frag(v2f i) : SV_Target
+//			{
+//				if (i.particleType == KWS_DYNAMIC_WAVE_PARTICLE_TYPE_FOAM) discard;
+				
+//				//float noiseIGN = InterleavedGradientNoise(i.pos.xy, KW_Time * 10);
+//				//if (noiseIGN > 0.75) discard;
+				
+//				if (i.particleType > KWS_DYNAMIC_WAVE_PARTICLE_TYPE_SPLASH)
+//				{
+//					float3 waterColor = float3(0.7, 0.85, 1);
+//					float3 splashData = GetSplashData(i.uv, i.uvOffset);
+//					float splashMain = splashData.x;
+//					float splashShine = splashData.y;
+//					float noise = splashData.z;
+
+//					float lifeTime = 1 - GetParticleAlpha(i.normalizedLifeTime);
+					
+//					noise = saturate(noise - lifeTime * 2 + 1);
+//					splashShine = splashShine * noise;
+//					splashMain = splashMain * noise;
+//				//	float normalizedSpeed = saturate(i.initialSpeed * i.initialSpeed * 0.05);
+//				//	waterColor *= lerp(0.75, 1.0, normalizedSpeed);
+
+
+//					float noiseIGN = InterleavedGradientNoise(i.pos.xy, KW_Time * 10 + i.particleRandom01 * 100);
+//					if (noiseIGN * (dot(waterColor + splashShine * 0.1, 0.33) - 0.41) < 0.2) discard;
+//					if (noiseIGN > 0.8) discard;
+					
+//					splashShine = splashShine * splashShine * splashShine;
+
+//					float splashAlpha = saturate(splashMain * splashMain * 1.5 + splashShine * 1);
+					
+					
+//					//return float4(i.uv, 0, 1);
+//					if (splashAlpha < 0.02) discard;
+//				}
+//				else discard;
+//				/*float bubbleAlpha = ComputeBubblesAlpha(i.screenPos.xy / i.screenPos.w, i.uv, i.particleData.x, i.particleData.y);
+				
+//				alpha = saturate(bubbleAlpha * bubbleAlpha * bubbleAlpha * alpha * 20);
+//				*/
+//				//float alpha = saturate(1 - length(i.uv - 0.5) * 2);
+//				//if (alpha < 0.01) discard;
+
+//				UNITY_SETUP_INSTANCE_ID(i);
+//				SHADOW_CASTER_FRAGMENT(i)
+//			}
+//			ENDHLSL
+//		}
+//	}
+//}

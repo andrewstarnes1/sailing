@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 2a11df637cdfb3549b2df790fe85a63e
+timeCreated: 1511964395
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Scripts/Core/Utils/KW_Extensions.cs
+  uploadId: 767082

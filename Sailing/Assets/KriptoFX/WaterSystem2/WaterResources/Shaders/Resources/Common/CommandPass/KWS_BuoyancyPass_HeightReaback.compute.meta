@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: a279222207d2ff1418a31b2631fc8b1b
+ComputeShaderImporter:
+  externalObjects: {}
+  currentAPIMask: 4
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Shaders/Resources/Common/CommandPass/KWS_BuoyancyPass_HeightReaback.compute
+  uploadId: 767082

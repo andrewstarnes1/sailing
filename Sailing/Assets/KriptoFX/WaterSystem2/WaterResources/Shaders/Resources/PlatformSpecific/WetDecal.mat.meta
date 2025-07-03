@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: aae844d9184dc9f45af63ac97ecd2721
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Shaders/Resources/PlatformSpecific/WetDecal.mat
+  uploadId: 767082

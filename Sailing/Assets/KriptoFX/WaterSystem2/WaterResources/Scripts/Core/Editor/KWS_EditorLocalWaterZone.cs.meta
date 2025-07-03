@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 5a1187d6a1103f54eb0f2ae1eb1b2b91
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Scripts/Core/Editor/KWS_EditorLocalWaterZone.cs
+  uploadId: 767082

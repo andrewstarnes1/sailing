@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 5dd1c5f8610637a49983b8d2ecb8ef0c
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Shaders/Resources/Common/CommandPass/KWS_DynamicWavesWetDecal.shader
+  uploadId: 767082

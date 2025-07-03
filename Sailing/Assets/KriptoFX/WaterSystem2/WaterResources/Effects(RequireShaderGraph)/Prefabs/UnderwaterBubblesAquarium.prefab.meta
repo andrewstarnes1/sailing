@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 16c84de61ec91b24fafe0390e340ac97
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Effects(RequireShaderGraph)/Prefabs/UnderwaterBubblesAquarium.prefab
+  uploadId: 767082

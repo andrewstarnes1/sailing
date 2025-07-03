@@ -1,0 +1,59 @@
+#pragma kernel SearchHeightPositions
+
+#pragma multi_compile _ KWS_USE_LOCAL_WATER_ZONES
+#pragma multi_compile _ KWS_DYNAMIC_WAVES_VISIBLE_ZONES_1 KWS_DYNAMIC_WAVES_VISIBLE_ZONES_2 KWS_DYNAMIC_WAVES_VISIBLE_ZONES_4 KWS_DYNAMIC_WAVES_VISIBLE_ZONES_8
+#pragma multi_compile _ KWS_DYNAMIC_WAVES_USE_MOVABLE_ZONE
+
+#include "../KWS_WaterHelpers.cginc"
+#include "../KWS_Instancing.cginc"
+#include "../KWS_WaterVertPass.cginc"
+
+
+struct WaterSurfaceData
+{
+	float3 position;
+	float foam;
+
+	float3 velocity;
+};
+RWStructuredBuffer<WaterSurfaceData> SurfaceDataBuffer;
+uint KWS_SurfaceDataBufferCount;
+
+
+[numthreads(64, 1, 1)]
+void SearchHeightPositions(uint2 id : SV_DispatchThreadID)
+{
+	if (id.x >= KWS_SurfaceDataBufferCount) return;
+
+	WaterSurfaceData data = SurfaceDataBuffer[id.x];
+	const uint iterations = 4;
+	
+	float3 invertedDisplacedPosition = data.position;
+	for (uint i = 0; i < iterations; i++)
+	{
+		float3 displacement = GetFftWavesDisplacementBuoyancy(invertedDisplacedPosition);
+		float3 error = (invertedDisplacedPosition + displacement) - data.position;
+		invertedDisplacedPosition -= error;
+	}
+	
+	WaterOffsetData offsetData = ComputeWaterOffset(invertedDisplacedPosition);
+
+	float2 velocity = NormalizeDynamicWavesVelocity(offsetData.offset.xz) + offsetData.flowDirection;
+	float waterSurfaceHeight = KWS_WaterPosition.y;
+
+	float initalHeight = data.position.y;
+	data.position.y = offsetData.offset.y + waterSurfaceHeight;
+
+	velocity.x = isnan(velocity.x) ?  0 : velocity.x;
+	velocity.y = isnan(velocity.y) ?  0 : velocity.y;
+
+	data.velocity = float3(velocity.x, 0, velocity.y);
+	data.foam = offsetData.foamMask;
+
+	if (offsetData.orthoDepth > -9999.0)
+	{
+		if (data.position.y > waterSurfaceHeight) data.position.y = offsetData.oceanOffset.y + waterSurfaceHeight;
+	}
+	
+	SurfaceDataBuffer[id.x] = data;
+}

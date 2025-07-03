@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: ecf4a80ae8537754999f47f0daab9a78
+timeCreated: 1571168752
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Scripts/Core/DynamicWaves/KWS_DynamicWavesHelpers.cs
+  uploadId: 767082

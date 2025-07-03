@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 105587b02ec20394aab53014bf73a236
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/Shaders/Resources/Common/CommandPass/KWS_DynamicWavesFoamParticlesOpaque.backup
+  uploadId: 767082

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 19db8fea26d333b429867702a7138f47
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/WaterResources/KWS_asmdef.asmdef
+  uploadId: 767082

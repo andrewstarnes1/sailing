@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f778611ce1e9cc54da18e0c47994927f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 4890085278179872738
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 323662
+  packageName: KWS2 Dynamic Water System
+  packageVersion: 1.0.0e
+  assetPath: Assets/KriptoFX/WaterSystem2/DemoScenes/GalleonDemo/GalleonDemoSettings.lighting
+  uploadId: 767082
