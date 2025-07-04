@@ -15,56 +15,27 @@ public class RealisticSailPhysics : MonoBehaviour
 {    // A tiny struct to hold each luff anchor
 
     private struct LuffAnchor
-
     {
-
         public SailNode Node;
-
         public Vector3 Home;
-
-
-
         public LuffAnchor(SailNode node, Vector3 home)
-
         {
-
             Node = node;
-
             Home = home;
-
         }
-
     }
 
     [Header("Boat")]
-
     public Rigidbody boatBody;
-
-
-
     [Header("Aero Settings")]
-
     [Range(0, 90)] public float stallAngle = 45f;
-
     [Range(0.1f, 10f)] public float windScale = 2f;
-
     public Transform head, tack, clew;
-
     [Header("Sheet Trim")]
-
-
-
-
-
     // internally store the _initial_ rest lengths
-
     private float _portInitialRest, _starInitialRest;
-
     [Header("Sheets")]
-
     public Transform portSheetAttachment, starboardSheetAttachment;
-
-
     /// <summary>
     /// From 0 to 180, between 0 and 25 no power (in irons), 25 and 60 (close haul go from 1% power to 60% power), from 60 to 120 power go from 60% to 100% to 70% power  (beam reach), from 120 to 180 degrees (broad reach into run) we go from 70% down to 40% power
     /// </summary>
@@ -91,6 +62,9 @@ public class RealisticSailPhysics : MonoBehaviour
     [Tooltip("0 = fully slack, 1 = fully trimmed in")]
     [Range(0f, 1f)]
     public float portSheetTrim = 0f;
+
+
+    // In Game we wont touch this, always leave it to maximum and only let user adjust portSheetTrim
     [Tooltip("Spring stiffness for each sheet (higher = tighter)")]
     [Range(0f, 2000f)]
     public float portSheetStiffness = 20f;
@@ -98,6 +72,8 @@ public class RealisticSailPhysics : MonoBehaviour
     [Range(0f, 1f)]
     public float starboardSheetTrim = 0f;
     [Tooltip("Spring stiffness for each sheet (higher = tighter)")]
+
+    // In Game we wont touch this, always leave it to maximum and only let user adjust starboardSheetTrim
     [Range(0f, 2000f)]
     public float starboardSheetStiffness = 20f;
 
@@ -292,27 +268,15 @@ public class RealisticSailPhysics : MonoBehaviour
 
 
         // do the “base” number of passes
-
         for (int i = 0; i < basePass; i++)
-
             foreach (var s in springs)
-
                 s.ApplySpringConstraint();
-
-
-
         // maybe do one more pass
-
         if (Random.value < extraFrac)
-
             foreach (var s in springs)
-
                 s.ApplySpringConstraint();
-
-
 
         // 3) finally push those new node positions into your mesh
-
         UpdateMeshVertices();
 
 
@@ -334,32 +298,22 @@ public class RealisticSailPhysics : MonoBehaviour
 
 
     // -------------- in RealisticSailPhysics.cs --------------
-
-
-
     // you’ll need to store each spring’s restLength when you create it:
-
     // public class SailSpring { public float restLength, stiffness; ... }
 
 
 
     public float ComputeTotalSpringTension()
-
     {
-
         float sum = 0f;
-
         foreach (var s in springs)
         {
             // skip completely fixed or super-rigid luff springs if you like
-
             float current = Vector3.Distance(s.nodeA.position, s.nodeB.position);
             float ext = current - s.restLength;
             sum += Mathf.Abs(s.stiffness * ext);
         }
-
         return sum;
-
     }
 
 
@@ -399,37 +353,22 @@ public class RealisticSailPhysics : MonoBehaviour
             {
 
                 float tX = cols == 1 ? 0f : x / (float)(cols - 1);
-
                 Vector3 pos = Vector3.Lerp(front, back, tX);
 
-
-
                 // record it
-
                 uCoords.Add(tX);
 
                 // fix the entire luff edge (x==0)
-
                 bool isFixed = (x == 0);
 
 
-
                 Vector3 frontL = Vector3.Lerp(tackL, headL, tY);
-
                 Vector3 backL = Vector3.Lerp(clewL, headL, tY);
-
                 Vector3 posL = Vector3.Lerp(frontL, backL, tX);
-
                 SailNode sn = new SailNode(posL, isFixed);
-
                 nodes.Add(sn);
 
-
-
-
-
                 if (x == 0)
-
                     luffAnchors.Add(new LuffAnchor(sn, posL));
 
             }
@@ -445,109 +384,58 @@ public class RealisticSailPhysics : MonoBehaviour
     {
 
         springs.Clear();
-
         leechSprings.Clear();
-
         // for each row pair, connect:
-
         for (int y = 0; y < verticalSegments; y++)
-
         {
-
             int startA = rowStart[y], countA = rowCount[y];
-
             int startB = rowStart[y + 1], countB = rowCount[y + 1];
 
 
-
             // horizontal springs in row A
-
             for (int x = 0; x < countA - 1; x++)
-
                 springs.Add(new SailSpring(nodes[startA + x],
-
                              nodes[startA + x + 1]));
 
-
-
             // between rows (vertical + diagonal)
-
             for (int x = 0; x < countA; x++)
-
             {
-
                 // map horizontal index into the smaller row above
-
                 float normX = x / (float)(countA - 1);
-
                 int xB = Mathf.RoundToInt(normX * (countB - 1));
-
-
-
-                // vertical spring
-
+                // vertical spring
                 springs.Add(new SailSpring(nodes[startA + x],
-
                      nodes[startB + xB]));
-
-
-
                 // diagonal toward the next B node
-
                 if (x < countA - 1)
-
                 {
-
                     int xB2 = Mathf.RoundToInt((x + 1) / (float)(countA - 1) * (countB - 1));
-
                     springs.Add(new SailSpring(nodes[startA + x],
-
                                  nodes[startB + xB2]));
-
                     springs.Add(new SailSpring(nodes[startA + x + 1],
-
                                  nodes[startB + xB]));
 
                 }
-
             }
-
         }
 
         // now build the leech rail
-
         for (int y = 0; y <= verticalSegments; y++)
-
         {
-
             int start = rowStart[y], count = rowCount[y];
-
             if (count < 2) continue;
 
-
-
             var A = nodes[start + count - 1];
-
             var B = (y < verticalSegments)
-
                 ? nodes[rowStart[y + 1] + rowCount[y + 1] - 1]
-
                 : default;
 
-
-
-            // use scaled stiffness based on how much starboard is trimmed
-
+            // use scaled stiffness based on how much starboard is trimmed
             float railStiff = leechStiffness * starboardSheetTrim;
 
-
-
             SailSpring S1 = new SailSpring(A, nodes[start + count - 2], railStiff);
-
             leechSprings.Add(S1);
-
             // horizontal neighbor along the leech
-
             springs.Add(S1);
 
 
@@ -813,12 +701,14 @@ public class RealisticSailPhysics : MonoBehaviour
         Vector3 appWind = trueWind - boatBody.linearVelocity;
 
         _lastSailPower = CalculateSailForwardPower(appWind);
+
+        boatBody.AddForce(boatBody.transform.forward * _lastSailPower*maximumSailPower*GlobalWind.Instance.windStrength);
         sailMesh.RecalculateBounds();
     }
-
+    [SerializeField] float maximumSailPower = 10f; 
     /// <summary>
     /// Returns the forward-driving force multiplier [0, 1].
-    /// </summary>
+    /// </summary> 
     float CalculateSailForwardPower(Vector3 apparentWind)
     {
         // 1. Calculate apparent wind angle relative to boat forward
@@ -860,13 +750,22 @@ public class RealisticSailPhysics : MonoBehaviour
             sheetStiffness = (awa > 0f) ? portSheetStiffness : starboardSheetStiffness;
         }
 
-        // 4. Sheet setting power (curve: 0–1, can be tuned for each angle)
-        // If you want to modulate by point-of-sail, pass the normalized AWA
-        float sheetEffect = sailPowerAtSheetSetting1.Evaluate(1f-pointOfSailNorm); 
-        _lastSheetEffect = sheetEffect;
-        // 5. Combine: base power × (sheet trim × sheet effect)
-        float power = basePower * Mathf.Clamp01(sheetTrim * sheetEffect);
 
+        // This gives us where we want our sheet to be currently trimmed to, can depower our sail by up to 50% if set incorrectly. 
+        // For example if sheetEffect = 0.2 but our current sheetTrim = 1, then output power will be 50% what it should be, similarily if sheetEffect = 1 and our sheetEffect = 0, then output Power will be 50% of max
+
+
+        // sheetEffect is the *optimal* sheet trim for this point of sail, 0=let out, 1=close hauled
+        float sheetEffect = sailPowerAtSheetSetting1.Evaluate(pointOfSailNorm);
+
+        // Penalize mismatch: if current trim is far from optimal, lose power
+        float trimPenalty = 1f - Mathf.Abs(sheetTrim - sheetEffect); // 1 when perfect, 0 when completely wrong
+
+        // Now compute final power (could multiply with your other terms as needed)
+        float power = basePower * Mathf.Clamp01(trimPenalty);
+
+        _lastSheetEffect = trimPenalty;
+        // 5. Combine: base power × (sheet trim × sheet effect)
         // Optionally modulate with sheet stiffness if you want
         // power *= Mathf.InverseLerp(minStiffness, maxStiffness, sheetStiffness);
 
